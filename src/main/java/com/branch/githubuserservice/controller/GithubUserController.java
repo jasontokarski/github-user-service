@@ -7,14 +7,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.branch.githubuserservice.dto.response.GithubUserResponse;
+import com.branch.githubuserservice.service.GithubUserService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/github/users")
 public class GithubUserController {
 
+    private final GithubUserService githubUserService;
+    
     @GetMapping("/{username}")
     public ResponseEntity<GithubUserResponse> getUser(@PathVariable("username") String username) {
-        return ResponseEntity.ok(GithubUserResponse.builder().build());
+        GithubUserResponse githubUserResponse = githubUserService.getGithubUserAndRepos(username);
+        return ResponseEntity.ok(githubUserResponse);
     }
 }
     
