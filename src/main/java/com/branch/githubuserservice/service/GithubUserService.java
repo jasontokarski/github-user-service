@@ -2,6 +2,7 @@ package com.branch.githubuserservice.service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 
 import org.springframework.stereotype.Service;
@@ -12,7 +13,9 @@ import com.branch.githubuserservice.dto.github.GithubUserDto;
 import com.branch.githubuserservice.dto.response.GithubUserResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GithubUserService {
@@ -21,6 +24,8 @@ public class GithubUserService {
     private final ExecutorService virtualThreadExecutor;
     
     public GithubUserResponse getGithubUserAndRepos(String username) {
+        log.info("Fetching GitHub user and repositories for: {}", username);
+        
         CompletableFuture<GithubUserDto> userFuture = CompletableFuture.supplyAsync(
             () -> githubRestClient.getUser(username),
             virtualThreadExecutor
@@ -31,14 +36,24 @@ public class GithubUserService {
             virtualThreadExecutor
         );
 
-        GithubUserResponse response = CompletableFuture.allOf(userFuture, repositoriesFuture)
-        .thenApply(v -> mergeUserAndRepositories(userFuture.join(), repositoriesFuture.join()))
-        .join();
-
-        return response;
+        try {
+            GithubUserResponse response = CompletableFuture.allOf(userFuture, repositoriesFuture)
+                .thenApply(v -> mergeUserAndRepositories(userFuture.join(), repositoriesFuture.join()))
+                .join();
+            
+            log.info("Successfully fetched data for user: {}", username);
+            return response;
+        } catch (CompletionException ex) {
+            Throwable cause = ex.getCause();
+            if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            }
+            log.error("Unexpected error fetching GitHub data for {}: {}", username, cause.getMessage(), cause);
+            throw new RuntimeException("Failed to fetch GitHub user data", cause);
+        }
     }
     
-    public GithubUserResponse mergeUserAndRepositories(GithubUserDto user, List<GithubRepositoryDto> repositories) {
+    private GithubUserResponse mergeUserAndRepositories(GithubUserDto user, List<GithubRepositoryDto> repositories) {
         return GithubUserResponse.builder()
             .userName(user.login())
             .displayName(user.name())
