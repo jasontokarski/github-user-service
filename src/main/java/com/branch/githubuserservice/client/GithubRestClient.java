@@ -29,6 +29,7 @@ public class GithubRestClient {
             .uri("/users/{username}/repos", username)
             .retrieve()
             .body(GithubRepositoryDto[].class);
-        return Arrays.asList(repositories);
+            
+        return repositories != null ? Arrays.asList(repositories) : List.of();
     }
 }
