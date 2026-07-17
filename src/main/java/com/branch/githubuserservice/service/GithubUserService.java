@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 
 import org.springframework.stereotype.Service;
 
-import com.branch.githubuserservice.client.GithubRestClient;
+import com.branch.githubuserservice.client.GithubApiClient;
 import com.branch.githubuserservice.dto.github.GithubRepositoryDto;
 import com.branch.githubuserservice.dto.github.GithubUserDto;
 import com.branch.githubuserservice.dto.response.GithubUserResponse;
@@ -20,19 +20,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GithubUserService {
 
-    private final GithubRestClient githubRestClient;
+    private final GithubApiClient githubApiClient;
     private final ExecutorService virtualThreadExecutor;
     
     public GithubUserResponse getGithubUserAndRepos(String username) {
         log.info("Fetching GitHub user and repositories for: {}", username);
         
         CompletableFuture<GithubUserDto> userFuture = CompletableFuture.supplyAsync(
-            () -> githubRestClient.getUser(username),
+            () -> githubApiClient.getUser(username),
             virtualThreadExecutor
         );
 
         CompletableFuture<List<GithubRepositoryDto>> repositoriesFuture = CompletableFuture.supplyAsync(
-            () -> githubRestClient.getUserRepositories(username),
+            () -> githubApiClient.getUserRepositories(username),
             virtualThreadExecutor
         );
 

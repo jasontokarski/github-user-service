@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class GithubRestClient {
+public class GithubApiClient {
     private final RestClient githubRestClient;
     
     public GithubUserDto getUser(String username) {
