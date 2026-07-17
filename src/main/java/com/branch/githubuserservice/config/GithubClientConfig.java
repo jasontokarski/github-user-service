@@ -7,16 +7,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.web.client.RestClient;
 
 import com.branch.githubuserservice.exception.GithubApiException;
-import com.branch.githubuserservice.exception.GithubRateLimitException;
 import com.branch.githubuserservice.exception.GithubServiceUnavailableException;
 import com.branch.githubuserservice.exception.GithubUserNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@EnableRetry
 @Configuration
 public class GithubClientConfig {
     
