@@ -13,6 +13,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.branch.githubuserservice.dto.response.GithubUserResponse;
+import com.branch.githubuserservice.exception.GithubUserNotFoundException;
 import com.branch.githubuserservice.service.GithubUserService;
 
 @WebMvcTest(GithubUserController.class)
@@ -39,5 +40,13 @@ public class GithubUserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user_name").value("octocat"))
                 .andExpect(jsonPath("$.display_name").value("The Octocat"));
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenUsernameIsInvalid() throws Exception {
+        String username = "invalid";
+        when(githubUserService.getGithubUserAndRepos(username)).thenThrow(new GithubUserNotFoundException("User not found"));
+        mockMvc.perform(get("/api/v1/github/users/{username}", username))
+                .andExpect(status().isNotFound());
     }
 }
