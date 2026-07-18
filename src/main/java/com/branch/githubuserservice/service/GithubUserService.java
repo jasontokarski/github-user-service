@@ -1,5 +1,7 @@
 package com.branch.githubuserservice.service;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -11,6 +13,7 @@ import com.branch.githubuserservice.client.GithubApiClient;
 import com.branch.githubuserservice.dto.github.GithubRepositoryDto;
 import com.branch.githubuserservice.dto.github.GithubUserDto;
 import com.branch.githubuserservice.dto.response.GithubUserResponse;
+import com.branch.githubuserservice.util.CompletionExceptionUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,16 +47,16 @@ public class GithubUserService {
             log.info("Successfully fetched data for user: {}", username);
             return response;
         } catch (CompletionException ex) {
-            Throwable cause = ex.getCause();
-            if (cause instanceof RuntimeException) {
-                throw (RuntimeException) cause;
-            }
-            log.error("Unexpected error fetching GitHub data for {}: {}", username, cause.getMessage(), cause);
-            throw new RuntimeException("Failed to fetch GitHub user data", cause);
+            log.error("Error fetching GitHub data for {}: {}", username, ex.getMessage());
+            throw CompletionExceptionUtil.unwrap(ex);
         }
     }
     
     private GithubUserResponse mergeUserAndRepositories(GithubUserDto user, List<GithubRepositoryDto> repositories) {
+        String formattedCreatedAt = user.createdAt() != null 
+            ? DateTimeFormatter.RFC_1123_DATE_TIME.format(user.createdAt().atZone(ZoneId.of("GMT")))
+            : null;
+            
         return GithubUserResponse.builder()
             .userName(user.login())
             .displayName(user.name())
@@ -61,7 +64,7 @@ public class GithubUserService {
             .geoLocation(user.location())
             .email(user.email())
             .url(user.url())
-            .createdAt(user.createdAt())
+            .createdAt(formattedCreatedAt)
             .repos(repositories)
             .build();
     }

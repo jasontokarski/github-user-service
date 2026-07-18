@@ -1,6 +1,5 @@
 package com.branch.githubuserservice.dto.response;
 
-import java.time.Instant;
 import java.util.List;
 
 import com.branch.githubuserservice.dto.github.GithubRepositoryDto;
@@ -21,6 +20,6 @@ public record GithubUserResponse(
     String email,
     String url,
     @JsonProperty("created_at")
-    Instant createdAt,
+    String createdAt,
     List<GithubRepositoryDto> repos
 ) {}
