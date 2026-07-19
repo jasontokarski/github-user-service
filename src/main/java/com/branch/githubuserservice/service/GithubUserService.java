@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.branch.githubuserservice.client.GithubApiClient;
@@ -26,6 +27,7 @@ public class GithubUserService {
     private final GithubApiClient githubApiClient;
     private final ExecutorService virtualThreadExecutor;
     
+    @Cacheable("githubUsers")
     public GithubUserResponse getGithubUserAndRepos(String username) {
         log.info("Fetching GitHub user and repositories for: {}", username);
         
