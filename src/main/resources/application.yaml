@@ -1,6 +1,17 @@
 spring:
   application:
     name: githubuserservice
+  cache:
+    type: simple
+    cache-names:
+      - githubUsers
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,caches
+
 github:
   api:
     base-url: https://api.github.com
