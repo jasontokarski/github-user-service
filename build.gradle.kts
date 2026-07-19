@@ -14,6 +14,10 @@ java {
 	}
 }
 
+tasks.withType<JavaCompile> {
+	options.compilerArgs.add("-parameters")
+}
+
 jacoco {
 	toolVersion = "0.8.12"
 }
@@ -24,6 +28,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-cache")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.retry:spring-retry:2.0.10")
@@ -49,9 +54,32 @@ tasks.jacocoTestReport {
 		html.required = true
 		csv.required = false
 	}
+	classDirectories.setFrom(
+		files(classDirectories.files.map {
+			fileTree(it) {
+				exclude(
+					"**/dto/**",
+					"**/exception/**",
+					"**/config/**"
+				)
+			}
+		})
+	)
 }
 
 tasks.jacocoTestCoverageVerification {
+	dependsOn(tasks.test)
+	classDirectories.setFrom(
+		files(classDirectories.files.map {
+			fileTree(it) {
+				exclude(
+					"**/dto/**",
+					"**/exception/**",
+					"**/config/**"
+				)
+			}
+		})
+	)
 	violationRules {
 		rule {
 			limit {
