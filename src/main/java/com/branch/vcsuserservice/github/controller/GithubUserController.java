@@ -29,7 +29,7 @@ public class GithubUserController {
             @Pattern(regexp = "^[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$", 
                      message = "Invalid GitHub username format")
             String username) {
-        VcsUserResponse vcsUserResponse = githubUserService.getGithubUserAndRepos(username);
+        VcsUserResponse vcsUserResponse = githubUserService.getUserAndRepos(username);
         return ResponseEntity.ok(vcsUserResponse);
     }
 }

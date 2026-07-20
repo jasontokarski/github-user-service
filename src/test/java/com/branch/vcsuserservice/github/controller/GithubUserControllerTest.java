@@ -35,7 +35,7 @@ public class GithubUserControllerTest {
                 .repos(Collections.emptyList())
                 .build();
         
-        when(githubUserService.getGithubUserAndRepos(username)).thenReturn(mockResponse);
+        when(githubUserService.getUserAndRepos(username)).thenReturn(mockResponse);
 
         mockMvc.perform(get("/api/v1/github/users/{username}", username))
                 .andExpect(status().isOk())
@@ -47,7 +47,7 @@ public class GithubUserControllerTest {
     @Test
     void shouldReturnNotFoundWhenUsernameIsInvalid() throws Exception {
         String username = "invalid";
-        when(githubUserService.getGithubUserAndRepos(username)).thenThrow(new GithubUserNotFoundException("User not found"));
+        when(githubUserService.getUserAndRepos(username)).thenThrow(new GithubUserNotFoundException("User not found"));
         mockMvc.perform(get("/api/v1/github/users/{username}", username))
                 .andExpect(status().isNotFound());
     }

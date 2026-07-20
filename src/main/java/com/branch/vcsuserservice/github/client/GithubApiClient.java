@@ -14,7 +14,6 @@ import com.branch.vcsuserservice.github.exception.GithubServiceUnavailableExcept
 
 import lombok.RequiredArgsConstructor;
 
-
 @Component
 @RequiredArgsConstructor
 public class GithubApiClient {

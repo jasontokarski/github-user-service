@@ -16,6 +16,7 @@ import com.branch.vcsuserservice.github.client.GithubApiClient;
 import com.branch.vcsuserservice.github.dto.github.GithubRepositoryDto;
 import com.branch.vcsuserservice.github.dto.github.GithubUserDto;
 import com.branch.vcsuserservice.github.util.CompletionExceptionUtil;
+import com.branch.vcsuserservice.service.VcsUserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GithubUserService {
+public class GithubUserService implements VcsUserService {
 
     private final GithubApiClient githubApiClient;
     private final ExecutorService virtualThreadExecutor;
     
+    @Override
     @Cacheable("githubUsers")
-    public VcsUserResponse getGithubUserAndRepos(String username) {
+    public VcsUserResponse getUserAndRepos(String username) {
         log.info("Fetching GitHub user and repositories for: {}", username);
         
         CompletableFuture<GithubUserDto> userFuture = CompletableFuture.supplyAsync(
@@ -76,7 +78,12 @@ public class GithubUserService {
             .url(user.url())
             .createdAt(formattedCreatedAt)
             .repos(vcsRepos)
-            .provider("github")
+            .provider(getProviderName())
             .build();
+    }
+    
+    @Override
+    public String getProviderName() {
+        return "github";
     }
 }

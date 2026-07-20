@@ -49,7 +49,7 @@ class GithubUserServiceTest {
         when(githubApiClient.getUser("octocat")).thenReturn(DEFAULT_USER);
         when(githubApiClient.getUserRepositories("octocat")).thenReturn(DEFAULT_REPOS);
 
-        VcsUserResponse vcsUserResponse = githubUserService.getGithubUserAndRepos("octocat");
+        VcsUserResponse vcsUserResponse = githubUserService.getUserAndRepos("octocat");
 
         assertEquals(vcsUserResponse.userName(), "octocat");
         assertEquals(vcsUserResponse.displayName(), "The Octocat");
