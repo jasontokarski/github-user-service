@@ -1,7 +1,8 @@
 package com.branch.vcsuserservice.github.exception;
 
-// Custom exception for service unavailable (503) errors
-public class GithubServiceUnavailableException extends RuntimeException {
+import com.branch.vcsuserservice.exception.VcsServiceUnavailableException;
+
+public class GithubServiceUnavailableException extends VcsServiceUnavailableException {
     public GithubServiceUnavailableException(String message) {
         super(message);
     }

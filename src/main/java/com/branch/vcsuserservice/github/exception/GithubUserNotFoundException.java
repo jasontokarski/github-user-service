@@ -1,7 +1,8 @@
 package com.branch.vcsuserservice.github.exception;
 
-// Custom exception for user not found (404) errors
-public class GithubUserNotFoundException extends RuntimeException {
+import com.branch.vcsuserservice.exception.VcsUserNotFoundException;
+
+public class GithubUserNotFoundException extends VcsUserNotFoundException {
     public GithubUserNotFoundException(String message) {
         super(message);
     }

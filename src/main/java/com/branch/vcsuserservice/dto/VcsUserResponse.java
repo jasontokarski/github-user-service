@@ -1,14 +1,13 @@
-package com.branch.vcsuserservice.github.dto.response;
+package com.branch.vcsuserservice.dto;
 
 import java.util.List;
 
-import com.branch.vcsuserservice.github.dto.github.GithubRepositoryDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
 
 @Builder
-public record GithubUserResponse(
+public record VcsUserResponse(
     @JsonProperty("user_name")
     String userName,
     @JsonProperty("display_name")
@@ -21,5 +20,6 @@ public record GithubUserResponse(
     String url,
     @JsonProperty("created_at")
     String createdAt,
-    List<GithubRepositoryDto> repos
+    List<VcsRepository> repos,
+    String provider
 ) {}

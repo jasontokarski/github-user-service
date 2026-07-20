@@ -1,4 +1,4 @@
-package com.branch.vcsuserservice.github.exception;
+package com.branch.vcsuserservice.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -12,36 +12,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(GithubUserNotFoundException.class)
-    public ResponseEntity<ProblemDetail> handleGithubUserNotFoundException(GithubUserNotFoundException ex) {
+    
+    @ExceptionHandler(VcsUserNotFoundException.class)
+    public ResponseEntity<ProblemDetail> handleVcsUserNotFoundException(VcsUserNotFoundException ex) {
         log.warn("User not found: {}", ex.getMessage());
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problemDetail.setTitle("User Not Found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }
 
-    @ExceptionHandler(GithubServiceUnavailableException.class)
-    public ResponseEntity<ProblemDetail> handleGithubServiceUnavailableException(GithubServiceUnavailableException ex) {
+    @ExceptionHandler(VcsServiceUnavailableException.class)
+    public ResponseEntity<ProblemDetail> handleVcsServiceUnavailableException(VcsServiceUnavailableException ex) {
         log.error("Service unavailable: {}", ex.getMessage());
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
         problemDetail.setTitle("Service Unavailable");
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problemDetail);
     }
 
-    @ExceptionHandler(GithubRateLimitException.class)
-    public ResponseEntity<ProblemDetail> handleGithubRateLimitException(GithubRateLimitException ex) {
+    @ExceptionHandler(VcsRateLimitException.class)
+    public ResponseEntity<ProblemDetail> handleVcsRateLimitException(VcsRateLimitException ex) {
         log.error("Rate limit exceeded: {}", ex.getMessage());
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
         problemDetail.setTitle("Rate Limit Exceeded");
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(problemDetail);
-    }
-
-    @ExceptionHandler(GithubApiException.class)
-    public ResponseEntity<ProblemDetail> handleGithubApiException(GithubApiException ex) {
-        log.error("API error: {}", ex.getMessage());
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-        problemDetail.setTitle("API Error");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -55,5 +48,4 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle("Validation Error");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
-    
 }

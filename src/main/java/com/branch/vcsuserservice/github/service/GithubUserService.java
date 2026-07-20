@@ -10,10 +10,11 @@ import java.util.concurrent.ExecutorService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.branch.vcsuserservice.dto.VcsRepository;
+import com.branch.vcsuserservice.dto.VcsUserResponse;
 import com.branch.vcsuserservice.github.client.GithubApiClient;
 import com.branch.vcsuserservice.github.dto.github.GithubRepositoryDto;
 import com.branch.vcsuserservice.github.dto.github.GithubUserDto;
-import com.branch.vcsuserservice.github.dto.response.GithubUserResponse;
 import com.branch.vcsuserservice.github.util.CompletionExceptionUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class GithubUserService {
     private final ExecutorService virtualThreadExecutor;
     
     @Cacheable("githubUsers")
-    public GithubUserResponse getGithubUserAndRepos(String username) {
+    public VcsUserResponse getGithubUserAndRepos(String username) {
         log.info("Fetching GitHub user and repositories for: {}", username);
         
         CompletableFuture<GithubUserDto> userFuture = CompletableFuture.supplyAsync(
@@ -42,7 +43,7 @@ public class GithubUserService {
         );
 
         try {
-            GithubUserResponse response = CompletableFuture.allOf(userFuture, repositoriesFuture)
+            VcsUserResponse response = CompletableFuture.allOf(userFuture, repositoriesFuture)
                 .thenApply(v -> mergeUserAndRepositories(userFuture.join(), repositoriesFuture.join()))
                 .join();
             
@@ -54,12 +55,19 @@ public class GithubUserService {
         }
     }
     
-    private GithubUserResponse mergeUserAndRepositories(GithubUserDto user, List<GithubRepositoryDto> repositories) {
+    private VcsUserResponse mergeUserAndRepositories(GithubUserDto user, List<GithubRepositoryDto> repositories) {
         String formattedCreatedAt = user.createdAt() != null 
             ? DateTimeFormatter.RFC_1123_DATE_TIME.format(user.createdAt().atZone(ZoneId.of("GMT")))
             : null;
+        
+        List<VcsRepository> vcsRepos = repositories.stream()
+            .map(repo -> VcsRepository.builder()
+                .name(repo.name())
+                .url(repo.url())
+                .build())
+            .toList();
             
-        return GithubUserResponse.builder()
+        return VcsUserResponse.builder()
             .userName(user.login())
             .displayName(user.name())
             .avatar(user.avatarUrl())
@@ -67,7 +75,8 @@ public class GithubUserService {
             .email(user.email())
             .url(user.url())
             .createdAt(formattedCreatedAt)
-            .repos(repositories)
+            .repos(vcsRepos)
+            .provider("github")
             .build();
     }
 }

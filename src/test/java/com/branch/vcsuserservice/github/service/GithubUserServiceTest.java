@@ -16,8 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.branch.vcsuserservice.dto.VcsUserResponse;
 import com.branch.vcsuserservice.github.client.GithubApiClient;
-import com.branch.vcsuserservice.github.dto.response.GithubUserResponse;
 
 @ExtendWith(MockitoExtension.class)
 class GithubUserServiceTest {
@@ -49,16 +49,16 @@ class GithubUserServiceTest {
         when(githubApiClient.getUser("octocat")).thenReturn(DEFAULT_USER);
         when(githubApiClient.getUserRepositories("octocat")).thenReturn(DEFAULT_REPOS);
 
-        GithubUserResponse githubUserResponse = githubUserService.getGithubUserAndRepos("octocat");
+        VcsUserResponse vcsUserResponse = githubUserService.getGithubUserAndRepos("octocat");
 
-        assertEquals(githubUserResponse.userName(), "octocat");
-        assertEquals(githubUserResponse.displayName(), "The Octocat");
-        assertEquals(githubUserResponse.avatar(), "https://avatars.githubusercontent.com/u/583231");
-        assertEquals(githubUserResponse.geoLocation(), "San Francisco");
-        assertEquals(githubUserResponse.email(), "octocat@github.com");
-        assertEquals(githubUserResponse.url(), "https://api.github.com/users/octocat");
-        assertEquals(githubUserResponse.repos(), DEFAULT_REPOS);
-        assertEquals(githubUserResponse.repos().size(), 2);
+        assertEquals(vcsUserResponse.userName(), "octocat");
+        assertEquals(vcsUserResponse.displayName(), "The Octocat");
+        assertEquals(vcsUserResponse.avatar(), "https://avatars.githubusercontent.com/u/583231");
+        assertEquals(vcsUserResponse.geoLocation(), "San Francisco");
+        assertEquals(vcsUserResponse.email(), "octocat@github.com");
+        assertEquals(vcsUserResponse.url(), "https://api.github.com/users/octocat");
+        assertEquals(vcsUserResponse.provider(), "github");
+        assertEquals(vcsUserResponse.repos().size(), 2);
         verify(githubApiClient).getUser("octocat");
         verify(githubApiClient).getUserRepositories("octocat");
     }

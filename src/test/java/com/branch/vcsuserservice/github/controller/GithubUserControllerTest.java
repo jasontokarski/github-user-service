@@ -12,7 +12,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.branch.vcsuserservice.github.dto.response.GithubUserResponse;
+import com.branch.vcsuserservice.dto.VcsUserResponse;
 import com.branch.vcsuserservice.github.exception.GithubUserNotFoundException;
 import com.branch.vcsuserservice.github.service.GithubUserService;
 
@@ -28,9 +28,10 @@ public class GithubUserControllerTest {
     @Test
     void shouldReturnUserWhenValidUsername() throws Exception {
         String username = "octocat";
-        GithubUserResponse mockResponse = GithubUserResponse.builder()
+        VcsUserResponse mockResponse = VcsUserResponse.builder()
                 .userName("octocat")
                 .displayName("The Octocat")
+                .provider("github")
                 .repos(Collections.emptyList())
                 .build();
         
@@ -39,7 +40,8 @@ public class GithubUserControllerTest {
         mockMvc.perform(get("/api/v1/github/users/{username}", username))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user_name").value("octocat"))
-                .andExpect(jsonPath("$.display_name").value("The Octocat"));
+                .andExpect(jsonPath("$.display_name").value("The Octocat"))
+                .andExpect(jsonPath("$.provider").value("github"));
     }
 
     @Test
