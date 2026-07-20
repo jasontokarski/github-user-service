@@ -60,7 +60,8 @@ tasks.jacocoTestReport {
 				exclude(
 					"**/dto/**",
 					"**/exception/**",
-					"**/config/**"
+					"**/config/**",
+					"**/*Application.class"
 				)
 			}
 		})
@@ -75,7 +76,8 @@ tasks.jacocoTestCoverageVerification {
 				exclude(
 					"**/dto/**",
 					"**/exception/**",
-					"**/config/**"
+					"**/config/**",
+					"**/*Application.class"
 				)
 			}
 		})
