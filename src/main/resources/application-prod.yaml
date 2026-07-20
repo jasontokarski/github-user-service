@@ -1,7 +1,7 @@
 logging:
   level:
     root: WARN
-    com.branch.githubuserservice: INFO
+    com.branch.vcsuserservice: INFO
 
 management:
   endpoints:

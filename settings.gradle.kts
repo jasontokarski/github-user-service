@@ -1,1 +1,1 @@
-rootProject.name = "githubuserservice"
+rootProject.name = "vcsuserservice"

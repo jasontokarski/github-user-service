@@ -1,4 +1,4 @@
-# GitHub User Service
+# VCS User Service
 
 A Spring Boot microservice that fetches GitHub user information and repositories using the GitHub API.
 
@@ -66,8 +66,8 @@ GET /api/v1/github/users/{username}
 
 **Clone the repository**
 ```bash
-git clone https://github.com/jasontokarski/github-user-service
-cd githubuserservice
+git clone https://github.com/jasontokarski/vcs-user-service
+cd vcsuserservice
 ```
 
 **Build the application**:
@@ -85,7 +85,7 @@ gradlew.bat clean build
 
 **Build outputs**:
 - Compiled classes: `build/classes/`
-- JAR file: `build/libs/githubuserservice-0.0.1-SNAPSHOT.jar`
+- JAR file: `build/libs/vcsuserservice-0.0.1-SNAPSHOT.jar`
 - Test reports: `build/reports/tests/test/index.html`
 - Test coverage: `build/reports/jacoco/test/html/index.html`
 
@@ -106,9 +106,9 @@ The application uses a multi-stage Docker build with a distroless base image for
 #### Using Docker
 
 ```bash
-docker build -t githubuserservice:latest .
+docker build -t vcsuserservice:latest .
 # Build with custom tag
-docker build -t githubuserservice:v1.0.0 .
+docker build -t vcsuserservice:v1.0.0 .
 ```
 
 The Dockerfile uses a **multi-stage build** for optimal image size and security:
@@ -133,10 +133,10 @@ The Dockerfile uses a **multi-stage build** for optimal image size and security:
 
 ```bash
 # List images
-docker images | grep githubuserservice
+docker images | grep vcsuserservice
 
 # Inspect image details
-docker inspect githubuserservice:latest
+docker inspect vcsuserservice:latest
 ```
 
 ## Running the Application
@@ -148,7 +148,7 @@ docker inspect githubuserservice:latest
 ./gradlew bootRun
 
 # Or run the JAR directly
-java -jar build/libs/githubuserservice-0.0.1-SNAPSHOT.jar
+java -jar build/libs/vcsuserservice-0.0.1-SNAPSHOT.jar
 ```
 
 The application will start on `http://localhost:8080`
@@ -156,7 +156,7 @@ The application will start on `http://localhost:8080`
 ### Docker Execution
 
 ```bash
-docker run -p 8080:8080 githubuserservice:latest
+docker run -p 8080:8080 vcsuserservice:latest
 ```
 
 ### Available Profiles
@@ -184,24 +184,24 @@ docker run -p 8080:8080 githubuserservice:latest
 
 ```bash
 # Development (default)
-java -jar build/libs/githubuserservice-0.0.1-SNAPSHOT.jar
+java -jar build/libs/vcsuserservice-0.0.1-SNAPSHOT.jar
 
 # Staging
-java -jar build/libs/githubuserservice-0.0.1-SNAPSHOT.jar --spring.profiles.active=staging
+java -jar build/libs/vcsuserservice-0.0.1-SNAPSHOT.jar --spring.profiles.active=staging
 
 # Production
-java -jar build/libs/githubuserservice-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+java -jar build/libs/vcsuserservice-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
 #### Docker with Profiles
 
 ```bash
 # Development
-docker run -p 8080:8080 githubuserservice:latest
+docker run -p 8080:8080 vcsuserservice:latest
 
 # Staging
-docker run -p 8080:8080 -e SPRING_PROFILE=staging githubuserservice:latest
+docker run -p 8080:8080 -e SPRING_PROFILE=staging vcsuserservice:latest
 
 # Production
-docker run -p 8080:8080 -e SPRING_PROFILE=prod githubuserservice:latest
+docker run -p 8080:8080 -e SPRING_PROFILE=prod vcsuserservice:latest
 ```
