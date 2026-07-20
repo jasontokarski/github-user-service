@@ -1,7 +1,7 @@
 logging:
   level:
     root: INFO
-    com.branch.githubuserservice: DEBUG
+    com.branch.vcsuserservice: DEBUG
     org.springframework.web: DEBUG
 
 management:
