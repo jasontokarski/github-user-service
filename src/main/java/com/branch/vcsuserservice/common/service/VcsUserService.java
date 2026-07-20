@@ -1,6 +1,6 @@
-package com.branch.vcsuserservice.service;
+package com.branch.vcsuserservice.common.service;
 
-import com.branch.vcsuserservice.dto.VcsUserResponse;
+import com.branch.vcsuserservice.common.dto.VcsUserResponse;
 
 public interface VcsUserService {
     VcsUserResponse getUserAndRepos(String username);

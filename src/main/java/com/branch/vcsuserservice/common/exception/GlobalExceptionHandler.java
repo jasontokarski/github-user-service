@@ -1,4 +1,4 @@
-package com.branch.vcsuserservice.exception;
+package com.branch.vcsuserservice.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;

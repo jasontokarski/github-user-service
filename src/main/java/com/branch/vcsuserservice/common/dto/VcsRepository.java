@@ -1,4 +1,4 @@
-package com.branch.vcsuserservice.dto;
+package com.branch.vcsuserservice.common.dto;
 
 import lombok.Builder;
 

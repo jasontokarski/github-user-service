@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.branch.vcsuserservice.dto.VcsUserResponse;
+import com.branch.vcsuserservice.common.dto.VcsUserResponse;
 import com.branch.vcsuserservice.github.client.GithubApiClient;
 
 @ExtendWith(MockitoExtension.class)

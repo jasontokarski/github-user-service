@@ -1,7 +1,5 @@
 package com.branch.vcsuserservice.github.service;
 
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -10,13 +8,14 @@ import java.util.concurrent.ExecutorService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.branch.vcsuserservice.dto.VcsRepository;
-import com.branch.vcsuserservice.dto.VcsUserResponse;
+import com.branch.vcsuserservice.common.util.CompletionExceptionUtil;
+import com.branch.vcsuserservice.common.util.DateFormatter;
+import com.branch.vcsuserservice.common.dto.VcsRepository;
+import com.branch.vcsuserservice.common.dto.VcsUserResponse;
 import com.branch.vcsuserservice.github.client.GithubApiClient;
 import com.branch.vcsuserservice.github.dto.github.GithubRepositoryDto;
 import com.branch.vcsuserservice.github.dto.github.GithubUserDto;
-import com.branch.vcsuserservice.github.util.CompletionExceptionUtil;
-import com.branch.vcsuserservice.service.VcsUserService;
+import com.branch.vcsuserservice.common.service.VcsUserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,10 +57,6 @@ public class GithubUserService implements VcsUserService {
     }
     
     private VcsUserResponse mergeUserAndRepositories(GithubUserDto user, List<GithubRepositoryDto> repositories) {
-        String formattedCreatedAt = user.createdAt() != null 
-            ? DateTimeFormatter.RFC_1123_DATE_TIME.format(user.createdAt().atZone(ZoneId.of("GMT")))
-            : null;
-        
         List<VcsRepository> vcsRepos = repositories.stream()
             .map(repo -> VcsRepository.builder()
                 .name(repo.name())
@@ -76,7 +71,7 @@ public class GithubUserService implements VcsUserService {
             .geoLocation(user.location())
             .email(user.email())
             .url(user.url())
-            .createdAt(formattedCreatedAt)
+            .createdAt(DateFormatter.formatToRfc1123(user.createdAt()))
             .repos(vcsRepos)
             .provider(getProviderName())
             .build();

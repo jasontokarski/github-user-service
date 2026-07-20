@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.branch.vcsuserservice.dto.VcsUserResponse;
+import com.branch.vcsuserservice.common.dto.VcsUserResponse;
 import com.branch.vcsuserservice.github.service.GithubUserService;
 
 import jakarta.validation.constraints.NotBlank;

@@ -12,7 +12,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.branch.vcsuserservice.dto.VcsUserResponse;
+import com.branch.vcsuserservice.common.dto.VcsUserResponse;
 import com.branch.vcsuserservice.github.exception.GithubUserNotFoundException;
 import com.branch.vcsuserservice.github.service.GithubUserService;
 

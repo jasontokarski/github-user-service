@@ -1,4 +1,4 @@
-package com.branch.vcsuserservice.exception;
+package com.branch.vcsuserservice.common.exception;
 
 public class VcsRateLimitException extends RuntimeException {
     public VcsRateLimitException(String message) {
