@@ -1,30 +1,26 @@
 # Build stage
-FROM gradle:8.12.0-jdk21-alpine AS builder
+FROM gradle:8.14-jdk21-alpine AS builder
 
 WORKDIR /app
-
 COPY build.gradle.kts settings.gradle.kts ./
 COPY gradle ./gradle
 RUN gradle dependencies --no-daemon || true
 COPY src ./src
 
 # Build the application
-RUN gradle bootJar --no-daemon && java -Djarmode=tools -jar build/libs/*.jar extract --layers --destination build/extracted
+RUN gradle bootJar --no-daemon
 
-#Runtime stage with distroless container
+# Runtime stage with distroless container
 FROM gcr.io/distroless/java21-debian12:nonroot
 
 WORKDIR /app
 
-# Copy the extracted layers from builder
-COPY --from=builder /app/build/extracted/dependencies/ ./
-COPY --from=builder /app/build/extracted/spring-boot-loader/ ./
-COPY --from=builder /app/build/extracted/snapshot-dependencies/ ./
-COPY --from=builder /app/build/extracted/application/ ./
+# Copy the JAR from builder
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
 
-# Use non-root user (distroless nonroot user is 65532)
-USER 65532:65532
+# Run as non-root user (distroless default)
+USER nonroot:nonroot
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
