@@ -1,0 +1,35 @@
+# Build artifacts
+build/
+.gradle/
+bin/
+out/
+target/
+
+# IDE files
+.idea/
+.vscode/
+.settings/
+.classpath
+.project
+*.iml
+*.iws
+*.ipr
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+HELP.md
+
+# Test reports
+reports/
+
+# Gradle wrapper jar (we'll download it in the image)
+!gradle/wrapper/gradle-wrapper.jar
