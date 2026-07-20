@@ -1,0 +1,13 @@
+logging:
+  level:
+    root: INFO
+    com.branch.githubuserservice: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,caches
+  endpoint:
+    health:
+      show-details: when-authorized

@@ -1,6 +1,8 @@
 spring:
   application:
     name: githubuserservice
+  profiles:
+    active: ${SPRING_PROFILE:dev}
   cache:
     type: simple
     cache-names:
@@ -15,3 +17,8 @@ management:
 github:
   api:
     base-url: https://api.github.com
+
+logging:
+  level:
+    root: INFO
+    com.branch.githubuserservice: INFO

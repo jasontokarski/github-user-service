@@ -158,3 +158,50 @@ The application will start on `http://localhost:8080`
 ```bash
 docker run -p 8080:8080 githubuserservice:latest
 ```
+
+### Available Profiles
+
+- **dev** (default) - Development environment with debug logging and all actuator endpoints enabled
+- **staging** - Staging environment with standard logging and limited actuator endpoints
+- **prod** - Production environment with minimal logging, restricted endpoints, and error details hidden
+
+### Running with Specific Profiles
+
+#### Using Gradle
+
+```bash
+# Development (default)
+./gradlew bootRun
+
+# Staging
+./gradlew bootRun --args='--spring.profiles.active=staging'
+
+# Production
+./gradlew bootRun --args='--spring.profiles.active=prod'
+```
+
+#### Using JAR
+
+```bash
+# Development (default)
+java -jar build/libs/githubuserservice-0.0.1-SNAPSHOT.jar
+
+# Staging
+java -jar build/libs/githubuserservice-0.0.1-SNAPSHOT.jar --spring.profiles.active=staging
+
+# Production
+java -jar build/libs/githubuserservice-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
+#### Docker with Profiles
+
+```bash
+# Development
+docker run -p 8080:8080 githubuserservice:latest
+
+# Staging
+docker run -p 8080:8080 -e SPRING_PROFILE=staging githubuserservice:latest
+
+# Production
+docker run -p 8080:8080 -e SPRING_PROFILE=prod githubuserservice:latest
+```
